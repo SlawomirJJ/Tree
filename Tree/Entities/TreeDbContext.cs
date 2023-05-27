@@ -4,21 +4,29 @@ namespace Tree.Entities
 {
     public class TreeDbContext: DbContext
     {
-        public DbSet <File> Files { get; set; }
+        private string _connectionString = "Server=(localdb)\\MSSQLLocalDB; Database=TreeDb;Trusted_Connection=True;";
+        public DbSet <Register> Registers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<File>()
+            modelBuilder.Entity<Register>()
                 .Property(r => r.Name)
-                .IsRequired();
+                .IsRequired()
+                .HasMaxLength(25);
 
-            modelBuilder.Entity<File>()
+            modelBuilder.Entity<Register>()
                 .Property(r => r.Path)
                 .IsRequired();
 
-            modelBuilder.Entity<File>()
+            modelBuilder.Entity<Register>()
                 .Property(r => r.Format)
-                .IsRequired();
+                .IsRequired()
+                .HasMaxLength(15);
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseSqlServer(_connectionString);
         }
     }
 }
